@@ -1,5 +1,5 @@
-(** Basic arithmetics with built-in integers *)
-
+(** Basic arithmetics with built-in *)
+(*#use "builtin.ml";;*)
 open Builtin
 
 (* Greater common divisor and smaller common multiple
@@ -31,5 +31,15 @@ let rec gcd a b =
     @param b non-zero integer.
 *)
 let bezout a b =
-  let pgcd = gcd a b in
-  (quot a pgcd, quot b pgcd, pgcd);;
+  let (res1, res2) = (1,1) in
+  let rec euclide(a, b, goal) =
+    match modulo a b with
+    |x when x = goal -> (a, - quot a b, a)
+    |x -> euclide(b, modulo a b, goal)
+  in
+  let rec bez(u,v,a_temp,b_temp)=
+    if a_temp = a then res1 += u else let (x,q,y) = euclide(a,b,a_temp) in bez ()
+
+  in
+
+  euclide(710, 310, 710, 40);;

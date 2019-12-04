@@ -1,4 +1,5 @@
 (** Basic arithmetics with built-in *)
+
 (*#use "builtin.ml";;*)
 open Builtin
 
@@ -30,7 +31,7 @@ let rec gcd a b =
     @param a non-zero integer
     @param b non-zero integer.
 *)
-let bezout a b =
+let bezout a b = (0,0,0) (*
   let (res1, res2) = (1,1) in
   let rec euclide(a, b, goal) =
     match modulo a b with
@@ -38,8 +39,8 @@ let bezout a b =
     |x -> euclide(b, modulo a b, goal)
   in
   let rec bez(u,v,a_temp,b_temp)=
-    if a_temp = a then res1 += u else let (x,q,y) = euclide(a,b,a_temp) in bez ()
+    if a_temp = a then res1 = res1 + u else let (x,q,y) = euclide(a,b,a_temp) in bez ()
 
   in
 
-  euclide(710, 310, 710, 40);;
+  euclide(710, 310, 710, 40);;*)

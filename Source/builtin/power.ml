@@ -10,13 +10,30 @@ open Basic_arithmetics
     @param x base
     @param n exponent
  *)
-let pow x n = 0
+let pow x n =
+  if n < 0 then 0
+  else
+    let rec powa truc i =
+    match i with
+    |y when y = n -> truc
+    |_ -> powa (truc * x) (i+1)
+  in
+  powa 1 0;;
 
 (** Fast integer exponentiation function. Logarithmic complexity.
     @param x base
     @param n exponent
  *)
-let power x n = 0
+let power x n =
+  let pair = if n mod 2 = 0 then 1 else x in
+  let rec powa b =
+    let parity = if b mod 2 = 0 then 1 else x in
+    match b with
+      |0 -> 1
+      |1 -> x
+      |_ -> let powa = powa(b/2) in parity * powa * powa
+  in
+  pair * powa (n/2) * powa(n/2);;
 
 (* Modular expnonentiation ; modulo a given natural number smaller
    max_int we never have integer-overflows if implemented properly.
@@ -27,7 +44,7 @@ let power x n = 0
     @param n exponent
     @param m modular base
  *)
-let mod_power x n m = 0
+let mod_power x n m = modulo (power x n) m;;
 
 (* Making use of Fermat Little Theorem for very quick exponentation
    modulo prime number.

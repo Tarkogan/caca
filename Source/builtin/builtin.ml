@@ -9,7 +9,7 @@ primitives to suit maths conventions.
 (** Sign function
     @param x integer
 *)
-let sign x = 0
+let sign x = if x >= 0 then 1 else -1;;
 
 (* Integer quotient implementation ; main use is in case of quotient
    of an integer by a natural number.
@@ -20,7 +20,11 @@ let sign x = 0
     @param a dividend
     @param b natural number you divide by.
  *)
-let quot a b = 0
+let quot a b =
+  if b < 0 then invalid_arg "b must be a natural number only."
+  else
+    let truc = if a < 0 && a mod b != 0 then (-1) else 0 in
+    a/b + truc;;
 
 (* Integer modulo implementations. Negative case need be taken into
    account ; representant is expected non-negative. This is not OCAML
@@ -35,7 +39,7 @@ let quot a b = 0
     @param a input integer
     @param b moduli a natural number.
  *)
-let modulo a b = 0
+let modulo a b = a - b * quot a b;;
 
 (* Integer modulo implementations. Negative case need be taken into
    account ; representant is expected non-negative. This is not OCAML
@@ -48,4 +52,4 @@ let modulo a b = 0
     @param a dividend
     @param b integer you divide by.
 *)
-let div a b = (0, 0)
+let div a b = (quot a b, modulo a b);;

@@ -1,0 +1,8 @@
+2019-12-04T11:56:18+00:00 r02p04.lyn-viv.sm.cri.epita.net#02 I: Start test Bezout Function:1:((22, 18), (-4, 5, 2)).
+2019-12-04T11:56:18+00:00 r02p04.lyn-viv.sm.cri.epita.net#02 E: Test Bezout Function:1:((22, 18), (-4, 5, 2)) has failed.
+2019-12-04T11:56:18+00:00 r02p04.lyn-viv.sm.cri.epita.net#02 E: Bezout Function
+2019-12-04T11:56:18+00:00 r02p04.lyn-viv.sm.cri.epita.net#02 E: expected: (-4, 5, 2) but got: (11, 9, 2) in test Bezout Function:1:((22, 18), (-4, 5, 2)).
+2019-12-04T11:56:18+00:00 r02p04.lyn-viv.sm.cri.epita.net#02 E: Raised at file "src/lib/ounit2/advanced/oUnitAssert.ml", line 45, characters 8-27
+2019-12-04T11:56:18+00:00 r02p04.lyn-viv.sm.cri.epita.net#02 E: Called from file "src/lib/ounit2/advanced/oUnitRunner.ml", line 83, characters 13-26
+2019-12-04T11:56:18+00:00 r02p04.lyn-viv.sm.cri.epita.net#02 E: 
+2019-12-04T11:56:18+00:00 r02p04.lyn-viv.sm.cri.epita.net#02 I: End test Bezout Function:1:((22, 18), (-4, 5, 2)).

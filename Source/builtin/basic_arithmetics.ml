@@ -10,7 +10,17 @@ open Builtin
     @param a non-zero integers
     @param b non-zero integer
 *)
-let rec gcd a b = 0
+let rec gcd a b =
+  if a = 0 || b = 0 then invalid_arg "a and b must be non zero integers"
+  else
+    let rec pgcd max = match a mod max with
+      |_ when max = 0 -> 1
+      |0 when b mod max = 0 -> abs(max)
+      |_ -> pgcd (max - 1)
+    in
+    pgcd(if abs(a) > abs(b) then abs(b) else abs(a));;
+
+
 
 (* Extended Euclidean algorithm. Computing Bezout Coefficients. *)
 
@@ -20,4 +30,6 @@ let rec gcd a b = 0
     @param a non-zero integer
     @param b non-zero integer.
 *)
-let bezout a b = (0, 0, 0)
+let bezout a b =
+  let pgcd = gcd a b in
+  (quot a pgcd, quot b pgcd, pgcd);;

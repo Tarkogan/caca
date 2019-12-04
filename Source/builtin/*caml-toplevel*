@@ -1,0 +1,501 @@
+        OCaml version 4.09.0
+
+# open Builtin
+
+(* Greater common divisor and smaller common multiple
+   implemetations.
+*)
+
+(** Greater common (positive) divisor of two non-zero integers.
+    @param a non-zero integers
+    @param b non-zero integer
+*)
+let rec gcd a b = 0
+  (*if (a,b) = (0,_)||(_,0) then invalid_arg "a and b must be non zero integers"
+  else
+    let max = if a > b then a else b and in
+    let i = max - 1 in match a mod max with
+      |_ when i = 1 -> *)
+
+
+
+(* Extended Euclidean algorithm. Computing Bezout Coefficients. *)
+
+(** Extended euclidean division of two integers NOT OCAML DEFAULT.
+    Given non-zero entries a b computes triple (u, v, d) such that
+    a*u + b*v = d and d is gcd of a and b.
+    @param a non-zero integer
+    @param b non-zero integer.
+*)
+let bezout a b = (0, 0, 0);;
+    * *     * * *     * * * *             * * * * *   Line 1, characters 5-12:
+1 | open Builtin
+         ^^^^^^^
+Error: Unbound module Builtin
+# #use "builtin.ml";;
+val sign : int -> int = <fun>
+val quot : int -> int -> int = <fun>
+val modulo : int -> int -> int = <fun>
+val div : int -> int -> int * int = <fun>
+# #use "builtin.ml" 
+open Builtin
+
+(* Greater common divisor and smaller common multiple
+   implemetations.
+*)
+
+(** Greater common (positive) divisor of two non-zero integers.
+    @param a non-zero integers
+    @param b non-zero integer
+*)
+let rec gcd a b = 0
+  (*if (a,b) = (0,_)||(_,0) then invalid_arg "a and b must be non zero integers"
+  else
+    let max = if a > b then a else b and in
+    let i = max - 1 in match a mod max with
+      |_ when i = 1 -> *)
+
+
+
+(* Extended Euclidean algorithm. Computing Bezout Coefficients. *)
+
+(** Extended euclidean division of two integers NOT OCAML DEFAULT.
+    Given non-zero entries a b computes triple (u, v, d) such that
+    a*u + b*v = d and d is gcd of a and b.
+    @param a non-zero integer
+    @param b non-zero integer.
+*)
+let bezout a b = (0, 0, 0);;
+      * *     * * *     * * * *             * * * * *   Line 2, characters 0-4:
+2 | open Builtin
+    ^^^^
+Error: Syntax error
+# let bezout a b = (0, 0, 0);;
+val bezout : 'a -> 'b -> int * int * int = <fun>
+# #use "builtin.ml" 
+open Builtin
+
+(* Greater common divisor and smaller common multiple
+   implemetations.
+*)
+
+(** Greater common (positive) divisor of two non-zero integers.
+    @param a non-zero integers
+    @param b non-zero integer
+*)
+let rec gcd a b = 0
+  (*if (a,b) = (0,_)||(_,0) then invalid_arg "a and b must be non zero integers"
+  else
+    let max = if a > b then a else b and in
+    let i = max - 1 in match a mod max with
+      |_ when i = 1 -> *)
+
+
+
+(* Extended Euclidean algorithm. Computing Bezout Coefficients. *)
+
+(** Extended euclidean division of two integers NOT OCAML DEFAULT.
+    Given non-zero entries a b computes triple (u, v, d) such that
+    a*u + b*v = d and d is gcd of a and b.
+    @param a non-zero integer
+    @param b non-zero integer.
+*)
+let bezout a b = (0, 0, 0);;
+      * *     * * *     * * * *             * * * * *   Line 2, characters 0-4:
+2 | open Builtin
+    ^^^^
+Error: Syntax error
+# #mod_use "builtin.ml" 
+open Builtin
+
+(* Greater common divisor and smaller common multiple
+   implemetations.
+*)
+
+(** Greater common (positive) divisor of two non-zero integers.
+    @param a non-zero integers
+    @param b non-zero integer
+*)
+let rec gcd a b = 0
+  (*if (a,b) = (0,_)||(_,0) then invalid_arg "a and b must be non zero integers"
+  else
+    let max = if a > b then a else b and in
+    let i = max - 1 in match a mod max with
+      |_ when i = 1 -> *)
+
+
+
+(* Extended Euclidean algorithm. Computing Bezout Coefficients. *)
+
+(** Extended euclidean division of two integers NOT OCAML DEFAULT.
+    Given non-zero entries a b computes triple (u, v, d) such that
+    a*u + b*v = d and d is gcd of a and b.
+    @param a non-zero integer
+    @param b non-zero integer.
+*)
+let bezout a b = (0, 0, 0);;
+      * *     * * *     * * * *             * * * * *   Line 2, characters 0-4:
+2 | open Builtin
+    ^^^^
+Error: Syntax error
+# #mod_use "builtin.ml";;
+module Builtin :
+  sig
+    val sign : int -> int
+    val quot : int -> int -> int
+    val modulo : int -> int -> int
+    val div : int -> int -> int * int
+  end
+# #mod_use "builtin.ml";;
+open Builtin
+
+(* Greater common divisor and smaller common multiple
+   implemetations.
+*)
+
+(** Greater common (positive) divisor of two non-zero integers.
+    @param a non-zero integers
+    @param b non-zero integer
+*)
+let rec gcd a b = 0
+  (*if (a,b) = (0,_)||(_,0) then invalid_arg "a and b must be non zero integers"
+  else
+    let max = if a > b then a else b and in
+    let i = max - 1 in match a mod max with
+      |_ when i = 1 -> *)
+
+
+
+(* Extended Euclidean algorithm. Computing Bezout Coefficients. *)
+
+(** Extended euclidean division of two integers NOT OCAML DEFAULT.
+    Given non-zero entries a b computes triple (u, v, d) such that
+    a*u + b*v = d and d is gcd of a and b.
+    @param a non-zero integer
+    @param b non-zero integer.
+*)
+let bezout a b = (0, 0, 0);;
+module Builtin :
+  sig
+    val sign : int -> int
+    val quot : int -> int -> int
+    val modulo : int -> int -> int
+    val div : int -> int -> int * int
+  end
+#     * *     * * *     * * * *             * * * * *   val gcd : 'a -> 'b -> int = <fun>
+val bezout : 'a -> 'b -> int * int * int = <fun>
+# #use "builtin.ml";;
+open Builtin
+
+(* Greater common divisor and smaller common multiple
+   implemetations.
+*)
+
+(** Greater common (positive) divisor of two non-zero integers.
+    @param a non-zero integers
+    @param b non-zero integer
+*)
+let rec gcd a b = 0
+  if a = 0 || b = 0 then invalid_arg "a and b must be non zero integers"
+  else
+    let max = (if a > b then a else b) - 1 in
+    let pgcd = match a mod max with
+      |_ when when max = 0 -> 1
+      |0 -> max
+      |_ - > let max = max - 1 in pgcd
+    in
+    pgcd;
+
+
+
+(* Extended Euclidean algorithm. Computing Bezout Coefficients. *)
+
+(** Extended euclidean division of two integers NOT OCAML DEFAULT.
+    Given non-zero entries a b computes triple (u, v, d) such that
+    a*u + b*v = d and d is gcd of a and b.
+    @param a non-zero integer
+    @param b non-zero integer.
+*)
+let bezout a b = (0, 0, 0);;
+val sign : int -> int = <fun>
+val quot : int -> int -> int = <fun>
+val modulo : int -> int -> int = <fun>
+val div : int -> int -> int * int = <fun>
+#     * *     * * *                                 * * * * *   Line 12, characters 2-4:
+12 |   if a = 0 || b = 0 then invalid_arg "a and b must be non zero integers"
+       ^^
+Error: Syntax error
+# let rec gcd a b = 
+  if a = 0 || b = 0 then invalid_arg "a and b must be non zero integers"
+  else
+    let max = (if a > b then a else b) - 1 in
+    let pgcd = match a mod max with
+      |_ when when max = 0 -> 1
+      |0 -> max
+      |_ - > let max = max - 1 in pgcd
+    in
+    pgcd;
+
+
+
+(* Extended Euclidean algorithm. Computing Bezout Coefficients. *)
+
+(** Extended euclidean division of two integers NOT OCAML DEFAULT.
+    Given non-zero entries a b computes triple (u, v, d) such that
+    a*u + b*v = d and d is gcd of a and b.
+    @param a non-zero integer
+    @param b non-zero integer.
+*)
+let bezout a b = (0, 0, 0);;
+                              * * * * *   Line 6, characters 14-18:
+6 |       |_ when when max = 0 -> 1
+                  ^^^^
+Error: Syntax error
+# let rec gcd a b = 
+  if a = 0 || b = 0 then invalid_arg "a and b must be non zero integers"
+  else
+    let max = (if a > b then a else b) - 1 in
+    let pgcd = match a mod max with
+      |_ when max = 0 -> 1
+      |0 -> max
+      |_ - > let max = max - 1 in pgcd
+    in
+    pgcd;
+
+
+
+(* Extended Euclidean algorithm. Computing Bezout Coefficients. *)
+
+(** Extended euclidean division of two integers NOT OCAML DEFAULT.
+    Given non-zero entries a b computes triple (u, v, d) such that
+    a*u + b*v = d and d is gcd of a and b.
+    @param a non-zero integer
+    @param b non-zero integer.
+*)
+let bezout a b = (0, 0, 0);;
+                              * * * * *   Line 8, characters 9-10:
+8 |       |_ - > let max = max - 1 in pgcd
+             ^
+Error: Syntax error
+# let rec gcd a b = 
+  if a = 0 || b = 0 then invalid_arg "a and b must be non zero integers"
+  else
+    let max = (if a > b then a else b) - 1 in
+    let pgcd = match a mod max with
+      |_ when max = 0 -> 1
+      |0 -> max
+      |_ -> let max = max - 1 in pgcd
+    in
+    pgcd;
+
+
+
+(* Extended Euclidean algorithm. Computing Bezout Coefficients. *)
+
+(** Extended euclidean division of two integers NOT OCAML DEFAULT.
+    Given non-zero entries a b computes triple (u, v, d) such that
+    a*u + b*v = d and d is gcd of a and b.
+    @param a non-zero integer
+    @param b non-zero integer.
+*)
+let bezout a b = (0, 0, 0);;
+                              * * * * *   Line 22, characters 26-28:
+22 | let bezout a b = (0, 0, 0);;
+                               ^^
+Error: Syntax error
+# let rec gcd a b = 
+  if a = 0 || b = 0 then invalid_arg "a and b must be non zero integers"
+  else
+    let max = (if a > b then a else b) - 1 in
+    let pgcd = match a mod max with
+      |_ when max = 0 -> 1
+      |0 -> max
+      |_ -> let max = max - 1 in pgcd
+    in
+    pgcd;;
+                  Line 8, characters 33-37:
+8 |       |_ -> let max = max - 1 in pgcd
+                                     ^^^^
+Error: Unbound value pgcd
+Hint: Did you mean gcd?
+# let rec gcd a b =
+  if a = 0 || b = 0 then invalid_arg "a and b must be non zero integers"
+  else
+    let max = (if a > b then a else b) - 1 in
+    let rec pgcd = match a mod max with
+      |_ when max = 0 -> 1
+      |0 -> max
+      |_ -> let max = max - 1 in pgcd
+    in
+    pgcd;;
+                  Lines 5-8, characters 19-37:
+5 | ...................match a mod max with
+6 |       |_ when max = 0 -> 1
+7 |       |0 -> max
+8 |       |_ -> let max = max - 1 in pgcd
+Error: This kind of expression is not allowed as right-hand side of `let rec'
+# let rec gcd a b =
+  if a = 0 || b = 0 then invalid_arg "a and b must be non zero integers"
+  else
+    let max = (if a > b then a else b) - 1 in
+    let rec pgcd = match a mod max with
+      |_ when max = 0 -> 1
+      |0 -> max
+      |_ -> let max = max - 1; pgcd
+    in
+    pgcd;;
+                  Line 10, characters 8-10:
+10 |     pgcd;;
+             ^^
+Error: Syntax error
+# let rec gcd a b =
+  if a = 0 || b = 0 then invalid_arg "a and b must be non zero integers"
+  else
+    let rec pgcd max = match a mod max with
+      |_ when max = 0 -> 1
+      |0 -> max
+      |_ -> pgcd (max - 1)
+    in
+    pgcd((if a > b then a else b) - 1);;
+                val gcd : int -> int -> int = <fun>
+# pgcd 10 5;;
+Line 1, characters 0-4:
+1 | pgcd 10 5;;
+    ^^^^
+Error: Unbound value pgcd
+Hint: Did you mean gcd?
+# gcd 10 5;;
+- : int = 5
+# gcd -10 5;;
+Line 1, characters 0-3:
+1 | gcd -10 5;;
+    ^^^
+Error: This expression has type int -> int -> int
+       but an expression was expected of type int
+# gcd (-10) 5
+;;
+  - : int = 2
+# let rec gcd a b =
+  if a = 0 || b = 0 then invalid_arg "a and b must be non zero integers"
+  else
+    let rec pgcd max = match a mod max with
+      |_ when max = 0 -> 1
+      |0 -> max
+      |_ -> pgcd (max - 1)
+    in
+    pgcd(if a > b then a else b);;
+                val gcd : int -> int -> int = <fun>
+# gcd 10 5;;
+- : int = 10
+# let rec gcd a b =
+  if a = 0 || b = 0 then invalid_arg "a and b must be non zero integers"
+  else
+    let rec pgcd max = match a mod max with
+      |_ when max = 0 -> 1
+      |0 -> max
+      |_ -> pgcd (max - 1)
+    in
+    pgcd(if a > b then b else a);;
+                val gcd : int -> int -> int = <fun>
+# gcd 10 5;;
+- : int = 5
+# gcd 10 4;;
+- : int = 2
+# gcd (-10) 5;;
+- : int = -10
+# let rec gcd a b =
+  if a = 0 || b = 0 then invalid_arg "a and b must be non zero integers"
+  else
+    let rec pgcd max = match a mod max with
+      |_ when max = 0 -> 1
+      |0 -> max
+      |_ -> pgcd (max - 1)
+    in
+    pgcd(if abs(a) > abs(b) then b else a);;
+                val gcd : int -> int -> int = <fun>
+# gcd 10 5;;
+- : int = 5
+# gcd 5 (-10);;
+- : int = 5
+# gcd (-10) 5;;
+- : int = 5
+# gcd (-10) (-5);;
+- : int = -5
+# let rec gcd a b =
+  if a = 0 || b = 0 then invalid_arg "a and b must be non zero integers"
+  else
+    let rec pgcd max = match a mod max with
+      |_ when max = 0 -> 1
+      |0 -> abs(max)
+      |_ -> pgcd (max - 1)
+    in
+    pgcd(if abs(a) > abs(b) then b else a);;
+                val gcd : int -> int -> int = <fun>
+# gcd 0 0;;
+Exception: Invalid_argument "a and b must be non zero integers".
+# gcd 1 (-1);;
+- : int = 1
+# let rec gcd a b =
+  if a = 0 || b = 0 then invalid_arg "a and b must be non zero integers"
+  else
+    let rec pgcd max = match a mod max with
+      |_ when max = 0 -> 1
+      |0 -> abs(max)
+      |_ -> pgcd (max - 1)
+    in
+    pgcd(if abs(a) > abs(b) then b else a);;
+                val gcd : int -> int -> int = <fun>
+# let bezout a b =
+  let pgcd = gcd a b in
+  (quot(a,pgcd), quot(b,pgcd), pgcd);;
+    Line 3, characters 7-15:
+3 |   (quot(a,pgcd), quot(b,pgcd), pgcd);;
+           ^^^^^^^^
+Error: This expression has type 'a * 'b
+       but an expression was expected of type int
+# let bezout a b =
+  let pgcd = gcd a b in
+  (quot a pgcd, quot b pgcd, pgcd);;
+    val bezout : int -> int -> int * int * int = <fun>
+# bezout 10 5;;
+- : int * int * int = (2, 1, 5)
+# open Builtin;;
+# gcd (-18)(-12);;
+- : int = 18
+# let rec gcd a b =
+  if a = 0 || b = 0 then invalid_arg "a and b must be non zero integers"
+  else
+    let rec pgcd max = match a mod max with
+      |_ when max = 0 -> 1
+      |0 -> abs(max)
+      |_ -> pgcd (max - 1)
+    in
+    pgcd(if abs(a) > abs(b) then abs(b) else abs(a));;
+                val gcd : int -> int -> int = <fun>
+# gcd (-18)(-12);;
+- : int = 9
+# let rec gcd a b =
+  if a = 0 || b = 0 then invalid_arg "a and b must be non zero integers"
+  else
+    let rec pgcd max = match a mod max with
+      |_ when b mod max = 0 -> 1
+      |0 -> abs(max)
+      |_ -> pgcd (max - 1)
+    in
+    pgcd(if abs(a) > abs(b) then abs(b) else abs(a));;
+                val gcd : int -> int -> int = <fun>
+# gcd (-18)(-12);;
+- : int = 1
+# let rec gcd a b =
+  if a = 0 || b = 0 then invalid_arg "a and b must be non zero integers"
+  else
+    let rec pgcd max = match a mod max with
+      |_ when max = 0 -> 1
+      |0 when b mod max = 0 -> abs(max)
+      |_ -> pgcd (max - 1)
+    in
+    pgcd(if abs(a) > abs(b) then abs(b) else abs(a));;
+                val gcd : int -> int -> int = <fun>
+# gcd (-18)(-12);;
+- : int = 6
+# 

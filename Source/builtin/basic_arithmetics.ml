@@ -31,16 +31,27 @@ let rec gcd a b =
     @param a non-zero integer
     @param b non-zero integer.
 *)
-let bezout a b = (0,0,0) (*
-  let (res1, res2) = (1,1) in
-  let rec euclide(a, b, goal) =
-    match modulo a b with
+let bezout a b =
+  let (u, v) = (0,0) in
+  let rec euclide(a_t, b_t, goal) =
+    match modulo a_t b_t with
     |x when x = goal -> (a, - quot a b, a)
-    |x -> euclide(b, modulo a b, goal)
-  in
-  let rec bez(u,v,a_temp,b_temp)=
-    if a_temp = a then res1 = res1 + u else let (x,q,y) = euclide(a,b,a_temp) in bez ()
-
+    |x -> euclide(b, modulo a b, goal) (*-> (a,q,b,r) with a = qb + r*)
   in
 
-  euclide(710, 310, 710, 40);;*)
+  let rec bez(obj, facteur) =
+    let (a_temp,q,b_temp) = euclide(a,b,obj) in
+    match (a_temp,b_temp) with
+      |(x,y) when (x,y) = (a,b) -> (facteur * x, facteur * y)
+
+      |(x,y) when x = a -> let (a_prime,b_prime) = bez(y,facteur*q) in (facteur*x+a_prime,b_prime) (* a - qy = r*)
+      |(x,y) when x = b -> let (a_prime,b_prime) = bez(y,facteur*q) in (0+a_prime,facteur*x+b_prime) (* b - qy = r*)
+
+      |(x,y) -> let (xa_prime,xb_prime) = bez(x,facteur) and (ya_prime,yb_prime) = bez(y,facteur) in (xa_prime + ya_prime, xb_prime + yb_prime)
+  in 
+
+  bez(gcd a b, 1);;
+
+
+
+  (* *)

@@ -14,18 +14,17 @@ let pow x n =
   if n < 0 then 0
   else
     let rec powa truc i =
-    match i with
-    |y when y = n -> truc
-    |_ -> powa (truc * x) (i+1)
-  in
-  powa 1 0;;
+      match i with
+	|y when y = n -> truc
+	|_ -> powa (truc * x) (i+1)
+    in
+    (powa 1 0);;
 
 (** Fast integer exponentiation function. Logarithmic complexity.
     @param x base
     @param n exponent
  *)
 let power x n =
-  let pair = if n mod 2 = 0 then 1 else x in
   let rec powa b =
     let parity = if b mod 2 = 0 then 1 else x in
     match b with
@@ -33,7 +32,7 @@ let power x n =
       |1 -> x
       |_ -> let powa = powa(b/2) in parity * powa * powa
   in
-  pair * powa (n/2) * powa(n/2);;
+  powa(n);;
 
 (* Modular expnonentiation ; modulo a given natural number smaller
    max_int we never have integer-overflows if implemented properly.
@@ -56,4 +55,7 @@ let mod_power x n m = modulo (power x n) m;;
     @param n exponent
     @param p prime modular base
  *)
-let prime_mod_power x n p = 0
+let prime_mod_power x n p =
+  let facteur = if n > p then (n-p+1) else n
+  in
+  modulo (power x facteur) p;;

@@ -89,7 +89,7 @@ let rec public_data_g p = (p, quot (p-1) 2);; (* (p,g) *)
     @param pub_data a tuple (g, p) of public data for ElGamal cryptosystem.
  *)
 let generate_keys_g (g, p) =  (*(public key, private key)*)
-  let a = (g-1) in
+  let a = (g-2) in
   (prime_mod_power g a p, a);;
 
 (** ElGamal encryption process.
@@ -98,8 +98,8 @@ let generate_keys_g (g, p) =  (*(public key, private key)*)
     @param kA ElGamal public key.
  *)
 let encrypt_g msg (g, p) kA =
-  let (_,private_key) = generate_keys_g (g, p) in
-  (power g private_key, msg * power kA private_key);;
+  let k = quot (7*p) 11 in
+  (prime_mod_power g k p, msg * prime_mod_power kA k p);;
   
 
 (** ElGamal decryption process.
@@ -108,5 +108,4 @@ let encrypt_g msg (g, p) kA =
     @param pub_data a tuple (g, p) of public data for ElGamal cryptosystem.
  *)
 let decrypt_g (msgA, msgB) a (g, p) =
-  let truc = prime_mod_power msgA a p in
-  quot msgB (truc);;
+  modulo (quot msgB (prime_mod_power msgA a p)) p;;

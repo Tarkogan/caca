@@ -1,5 +1,10 @@
 (** Power function implementations for built-in integers *)
 
+(*
+#mod_use "builtin.ml";;
+#mod_use "basic_arithmetics.ml";;
+*)
+
 open Builtin
 open Basic_arithmetics
 
@@ -43,7 +48,12 @@ let power x n =
     @param n exponent
     @param m modular base
  *)
-let mod_power x n m = modulo (power x n) m;;
+let mod_power x n m =
+  let rec powa i nbr = match i with
+    |x when x >= n -> modulo nbr m
+    |_ -> let nbr = if abs(modulo (nbr*x) m) <= 1  then nbr*x else modulo nbr m * modulo x m in powa (i+1)(nbr)
+  in
+  powa 1 x;;
 
 (* Making use of Fermat Little Theorem for very quick exponentation
    modulo prime number.
@@ -58,4 +68,4 @@ let mod_power x n m = modulo (power x n) m;;
 let prime_mod_power x n p =
   let facteur = if n > p then (n-p+1) else n
   in
-  modulo (power x facteur) p;;
+  mod_power x facteur p;;

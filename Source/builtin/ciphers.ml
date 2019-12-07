@@ -2,6 +2,12 @@
     Built-in integer based ciphers.
 *)
 
+(*
+#mod_use "builtin.ml";;
+#mod_use "basic_arithmetics.ml";;
+#mod_use "power.ml";;
+*)
+
 open Builtin
 open Basic_arithmetics
 open Power
@@ -13,14 +19,24 @@ open Power
     @param m word to cipher.
     @param b base ; for ASCII codes should be set to 255.
  *)
-let encrypt_cesar k m b = []
+let encrypt_cesar k m b =
+  let rec change liste = match liste with
+    |[] -> []
+    |e::s -> modulo(e+k) b ::change s
+  in
+  change m;;
 
 (** Cesar's cipher decryption
     @param k is an integer corresponding to key
     @param m encrypted word.
     @param b base ; for ASCII code should be set to 255.
  *)
-let decrypt_cesar k m b = []
+let decrypt_cesar k m b =
+  let rec change liste = match liste with
+    |[] -> []
+    |e::s -> modulo(e-k) b ::change s
+  in
+  change m;;
 
 (********** RSA Cipher **********)
 
@@ -30,7 +46,10 @@ let decrypt_cesar k m b = []
     @param p prime number
     @param q prime number
 *)
-let generate_keys_rsa p q = ((0,0), (0,0))
+let generate_keys_rsa p q =
+  if p = q then invalid_arg("Error generate_keys_rsa: both arguments have to be distinct prime numbers.")
+  else 0;;
+    
 
 
 (** Encryption using RSA cryptosystem.

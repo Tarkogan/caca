@@ -16,6 +16,8 @@ open Basic_arithmetics
     @param n number of elements in the list of integers.
  *)
 let init_eratosthenes n =
+  if n < 2 then invalid_arg("Error init_eratosthenes: number of values must be at least 2.")
+  else
   let rec truc i = match i with
     |x when x > n -> []
     |x -> x::truc(i+2)
@@ -27,7 +29,9 @@ let init_eratosthenes n =
 (** Eratosthene sieve.
     @param n limit of list of primes, starting at 2.
 *)
-let eratosthenes n =  
+let eratosthenes n =
+  if n < 2 then invalid_arg("Error eratosthenes: number of values must be at least 2.")
+  else
   let rec is_prime nbr i = match modulo nbr i with
     |_ when i*i > abs(nbr) -> true
     |0 -> false

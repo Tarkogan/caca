@@ -48,7 +48,20 @@ let decrypt_cesar k m b =
 *)
 let generate_keys_rsa p q =
   if p = q then invalid_arg("Error generate_keys_rsa: both arguments have to be distinct prime numbers.")
-  else 0;;
+    else
+    let (n,o) = (p*q,(p-1)*(q-1)) in
+    let rec dice d e = match d with
+      |x when modulo (e*x) o = 1 -> (e,d)
+      |1 -> invalid_arg("error generating rsa key: invalid parameters")
+      |x -> dice (x-1) e
+    in
+    let rec key i = match i with
+      |x when let (_,_,c) = (bezout o x) in c = 1 -> dice (o-1) i
+      |1 -> invalid_arg("error generating rsa key: invalid parameters")
+      |x -> key (i-1)
+    in
+     
+    let (e,d) = key (o-1) in ((n,e),(n,d));;
     
 
 
@@ -56,14 +69,13 @@ let generate_keys_rsa p q =
     @param m integer hash of message
     @param pub_key a tuple (n, e) composing public key of RSA cryptosystem.
  *)
-let encrypt_rsa m (n, e) = 0
+let encrypt_rsa m (n, e) = mod_power m e n;;
 
 (** Decryption using RSA cryptosystem.
     @param m integer hash of encrypter message.
     @param pub_key a tuple (n, d) composing private key of RSA cryptosystem.
  *)
-let decrypt_rsa m (n , d) = 0
-;;
+let decrypt_rsa m (n , d) = mod_power m d n;;
 
 (********** ElGamal Cipher **********)
 

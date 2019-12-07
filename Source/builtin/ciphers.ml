@@ -83,23 +83,30 @@ let decrypt_rsa m (n , d) = mod_power m d n;;
     where p is prime and g having high enough order modulo p.
     @param p is prime having form 2*q + 1 for prime q.
  *)
-let rec public_data_g p = (0, 0)
-
+let rec public_data_g p = (p, quot (p-1) 2);; (* (p,g) *)
+  
 (** Generate ElGamal public data.
     @param pub_data a tuple (g, p) of public data for ElGamal cryptosystem.
  *)
-let generate_keys_g (g, p) = (0, 0)
+let generate_keys_g (g, p) =  (*(public key, private key)*)
+  let a = (g-1) in
+  (prime_mod_power g a p, a);;
 
 (** ElGamal encryption process.
     @param msg message to be encrypted.
     @param pub_data a tuple (g, p) of ElGamal public data.
     @param kA ElGamal public key.
  *)
-let encrypt_g msg (g, p) kA = (0, 0)
+let encrypt_g msg (g, p) kA =
+  let (_,private_key) = generate_keys_g (g, p) in
+  (power g private_key, msg * power kA private_key);;
+  
 
 (** ElGamal decryption process.
     @param msg a tuple (msgA, msgB) forming an encrypted ElGamal message.
     @param a private key
     @param pub_data a tuple (g, p) of public data for ElGamal cryptosystem.
  *)
-let decrypt_g (msgA, msgB) a (g, p) = 0
+let decrypt_g (msgA, msgB) a (g, p) =
+  let truc = prime_mod_power msgA a p in
+  quot msgB (truc);;

@@ -137,4 +137,4 @@ let double_primes limit isprime = prime_couples limit isprime (function x -> 2*x
     @param limit positive integer bounding searched for primes.
     @param isprime function testing for (pseudo)primality.
  *)
-let twin_primes limit isprime = prime_couples limit isprime (function x -> x+2);;
+let twin_primes limit isprime = (2,3)::prime_couples limit isprime (function x -> x+2);;

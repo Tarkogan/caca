@@ -17,24 +17,55 @@ decomposition of a non-negative integer.
 (** Creates a bitarray from a built-in integer.
     @param x built-in integer.
 *)
-let from_int x = []
+let from_int x =
+  let rec power i pow = match pow>abs(x) with
+    |true -> pow/2 
+    |false-> power (i+1)(pow*2) in
+  let power = power 1 2
+  in
+  let rec binary nbr pwr = match pwr with
+    |0 -> []
+    |x -> binary (nbr mod pwr ) (pwr/2)@[nbr / pwr]
+  in
+  match x with
+    |x when x<0 && abs(x) = power -> 1::binary 0 (power/2)
+    |x when x<0 -> 1::binary (abs(x)) power
+    |x -> 0::binary (abs(x)) power;;
 
 (** Transforms bitarray of built-in size to built-in integer.
     UNSAFE: possible integer overflow.
     @param bA bitarray object.
  *)
-let to_int bA = 0
+let to_int bA =
+  let true_power = ref 1 in
+  let rec get_number power liste = match liste with
+    |[] ->  true_power := power; 1
+    |e::s when e > 1 || e < 0 -> invalid_arg("to_int: list's format is invalid.")
+    |e::s -> let suite = get_number (power * 2) s in power * e + suite
+  in
+  match bA with
+    |[] -> 0
+    |1::s when (get_number 1 s) - 1  = 0 -> -(!true_power)
+    |1::s -> let result = (get_number 1 s) - 1 in -result
+    |_::s -> let result = (get_number 1 s) - 1 in result;;
 
 (** Prints bitarray as binary number on standard output.
     @param bA a bitarray.
   *)
-let print_b bA = ()
+let print_b bA =
+  let rec get_string liste = match liste with
+    |[] -> ""
+    |e::s -> get_string s ^ string_of_int(e)
+  in
+  match bA with
+    |debut::bA -> print_string(string_of_int(debut) ^ get_string bA)
+    |_ -> print_string("");;
 
 (** Toplevel directive to use print_b as bitarray printer.
     CAREFUL: print_b is then list int printer.
     UNCOMMENT FOR TOPLEVEL USE.
 *)
-(* #install_printer print_b *)
+(*#install_printer print_b;;*)
 
 (** Internal comparisons on bitarrays and naturals. Naturals in this
     context are understood as bitarrays missing a bit sign and thus
@@ -47,7 +78,7 @@ let print_b bA = ()
            Assumed non-negative.
     @param nB A natural.
  *)
-let rec compare_n nA nB = 0
+let rec compare_n nA nB =
 
 (** Bigger inorder comparison operator on naturals. Returns true if
     first argument is bigger than second and false otherwise.

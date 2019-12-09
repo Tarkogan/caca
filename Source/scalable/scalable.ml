@@ -260,7 +260,7 @@ let quot_b bA bB =
   let (a,b) = to_int bA, to_int bB in
   if b = 0 then invalid_arg("quot_b: second argument must be a non zero Bitarray")
   else
-    let res = if a < 0 && a mod b != 0 then a / b - 1 else a / b in from_int(res);;
+    let res = if a < 0 && a mod b != 0 then a / b - sign_b bB else a / b in from_int(res);;
 
 (** Modulo of a bitarray against a positive one.
     @param bA Bitarray the modulo of which you're computing.

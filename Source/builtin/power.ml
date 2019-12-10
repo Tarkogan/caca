@@ -49,12 +49,14 @@ let power x n =
     @param m modular base
  *)
 let mod_power x n m =
-  let rec powa i nbr =
-    match i with
-    |x when x >= n -> modulo nbr m
-    |_ -> let nbr = if abs(modulo (nbr*x) m) <= 1  then nbr*x else modulo nbr m * modulo x m in powa (i+1)(nbr)
+  let rec powa base exp n =
+    let base = modulo base m in match modulo exp 2 with
+      |_ when exp = 0 -> 1
+      |_ when exp = 1 -> base
+      |0 -> powa (modulo (base*base) n) (exp/2) n
+      |_ -> modulo(base * (powa base (exp-1) n)) m
   in
-  powa 1 x;;
+  if x = 0 then 0 else powa x n m;;
 
 (* Making use of Fermat Little Theorem for very quick exponentation
    modulo prime number.
@@ -67,11 +69,10 @@ let mod_power x n m =
     @param p prime modular base
 *)
 let prime_mod_power x n p =
-  let facteur = if n > p then (n-p+1) else n
+  let facteur = modulo n (p-1)
   in
-  mod_power x facteur p;;
-
-
-
-
+  match (n<=0) with
+    |true when n = 0 -> 1
+    |true -> 0
+    |false -> mod_power x facteur p;;
 

@@ -138,14 +138,14 @@ let compare_b bA bB =
     @param nA natural.
     @param nB natural.
 *)
-let (<<) bA bB = compare_b bA bB = 1;;
+let (<<) nA nB = compare_b nA nB = 1;;
 
 (** Smaller inorder comparison operator on bitarrays. Returns true if
     first argument is smaller than second and false otherwise.
     @param nA natural.
     @param nB natural.
 *)
-let (>>) bA bB = compare_b bA bB = (-1);;
+let (>>) nA nB = compare_b nA nB = (-1);;
 
 (** Bigger or equal inorder comparison operator on bitarrays. Returns
     true if first argument is bigger or equal to second and false
@@ -153,7 +153,7 @@ let (>>) bA bB = compare_b bA bB = (-1);;
     @param nA natural.
     @param nB natural.
 *)
-let (<<=) bA bB = compare_n bA bB = 1 || compare_n bA bB = 0;;
+let (<<=) nA nB = compare_n nA nB = 1 || compare_n nA nB = 0;;
 
 (** Smaller or equal inorder comparison operator on naturals. Returns
     true if first argument is smaller or equal to second and false
@@ -161,7 +161,7 @@ let (<<=) bA bB = compare_n bA bB = 1 || compare_n bA bB = 0;;
     @param nA natural.
     @param nB natural.
 *)
-let (>>=) bA bB = compare_n bA bB = (-1) || compare_n bA bB = 0;;
+let (>>=) nA nB = compare_n nA nB = (-1) || compare_n nA nB = 0;;
 ;;
 
 (** Sign of a bitarray.
@@ -182,7 +182,7 @@ let abs_b bA = from_int(sign_b(bA)*to_int(bA));;
     @param a Built-in integer smaller than 4.
 *)
 let _quot_t a =
-  if a >= 4 then invalid_arg("_quot_t: parameter must be an integer smaller than 4")
+  if abs(a) >= 4 then invalid_arg("_quot_t: parameter must be an integer smaller than 4")
   else if a < 0 && a mod 2 != 0 then a / 2 - 1 else a / 2;;
 
 
@@ -202,7 +202,13 @@ let _div_t a = (_quot_t a, _mod_t a);;
     @param nA Natural.
     @param nB Natural.
 *)
-let add_n nA nB = from_int(to_int(0::nA) + to_int(0::nB));;
+let add_n nA nB =
+  let rec add last lis1 lis2 = match (lis1,lis2) with
+    |(e::s,f::l) -> _mod_t (e+f+last)::add (_quot_t (e+f+last)) s l
+    |(e::s,[])|([],e::s) -> _mod_t (e+last)::add (_quot_t (e+last)) s []
+    |([],[]) -> if last = 1 then [1] else []
+  in
+  (add 0 nA nB);;
 
 (** Difference of two naturals.
     UNSAFE: First entry is assumed to be bigger than second.
@@ -210,21 +216,43 @@ let add_n nA nB = from_int(to_int(0::nA) + to_int(0::nB));;
     @param nB Natural.
 *)
 let diff_n nA nB =
-  let (a,b) = (to_int(0::nA),to_int(0::nB)) in
-  if a < b then invalid_arg("diff_n: first natural must be larger than the second")
-  else from_int(a - b);;
+  if nA <=! nB then invalid_arg("diff_n: first natural must be larger than the second")
+  else let rec add last lis1 lis2 = match (lis1,lis2) with
+    |(e::s,f::l) -> _mod_t (e-f-last)::add (-_quot_t (e-f-last)) s l
+    |(e::s,[]) -> _mod_t (e-last)::add (-_quot_t (e-last)) s []
+    |([],[]) -> if last = 1 then [1] else []
+    |_ -> invalid_arg("diff_n: nA<nB")
+       in
+       (add 0 nA nB);;
 
 (** Addition of two bitarrays.
     @param bA Bitarray.
-    @param bB Bitarray.
+    
+@param bB Bitarray.
 *)
-let add_b bA bB = from_int(to_int(bA) + to_int(bB));;
+
+let add_b bA bB =
+  let (absA,absB) = match (abs_b bA, abs_b bB) with
+    |(_::e,_::s) -> (e,s)
+    |_ -> ([0],[0])
+  in
+  (*(absA,absB);;*)
+  match (bA,bB) with
+    |(_,[])|([],_) -> invalid_arg("add_b: arguments must be Bitarays")
+    |([x],_)|(_,[x]) -> invalid_arg("add_b: arguments must be Bitarays")
+    |(a1::a2,b1::b2) -> (*(a1,b1);;*) 
+      match (a1,b1) with
+	|(1,0) -> if absA >=! absB then 1::diff_n absA absB else 0::diff_n absB absA
+	|(0,1) -> if absA >=! absB then 0::diff_n absA absB else 1::diff_n absB absA
+	|(0,0) -> 0::add_n absA absB
+	|(1,1) -> from_int(-to_int(0::add_n absA absB))
+	|_ -> invalid_arg("add_b: arguments must be Bitarays");;  
 
 (** Difference of two bitarrays.
     @param bA Bitarray.
     @param bB Bitarray.
 *)
-let diff_b bA bB = from_int(to_int(bA) - to_int(bB));;
+let diff_b bA bB = add_b bA (from_int(-to_int(bB)));;
 
 (** Shifts bitarray to the left by a given natural number.
     @param bA Bitarray.

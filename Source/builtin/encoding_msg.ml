@@ -20,7 +20,7 @@ let encode str bits =
   let rec get_chars i facteur  = match i with
     |i when i < 0 -> 0
     |i -> let lettre = Char.code(str.[i]) in
-	  if lettre >= pwr then invalid_arg("Error encoding string: bit format doesn't match the requirements of the given string.")
+	  if lettre >= pwr then invalid_arg("Error encoding string: bit format doesn't match the requirements for the given string.")
 	  else get_chars (i-1)(facteur * pwr) + lettre*facteur
   in
   get_chars (len) 1;;
@@ -31,5 +31,11 @@ let encode str bits =
     @param bits number of bits on which to store a character ;
            alphanumeric ASCII is 7.
  *)
-let decode msg bits = "";;
+let decode msg bits =
+  let pwr = power 2 bits in
+  let rec sub nbr= match nbr with
+    |0 -> ""
+    |_ -> let lettre = modulo nbr pwr in sub (nbr/pwr) ^ Char.escaped(Char.chr(lettre))
+  in
+  sub msg;;
   

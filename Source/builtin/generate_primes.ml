@@ -28,7 +28,7 @@ let init_eratosthenes n =
 
 (** Eratosthene sieve.
     @param n limit of list of primes, starting at 2.
-*)
+*) (*Refaire en suivant la méthode du crible*)
 let eratosthenes n =
   if n < 2 then invalid_arg("Error eratosthenes: number of values must be at least 2.")
   else

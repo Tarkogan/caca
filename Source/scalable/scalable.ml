@@ -18,7 +18,9 @@
     @param x built-in integer.
 *)
 let from_int x =
-  let rec power i pow = match pow>abs(x) with
+  let abs_x = if x = min_int then abs(x+1) else abs(x) in
+  let rec power i pow = match pow>abs_x with
+    |_ when pow*2 < pow -> pow
     |true -> pow/2 
     |false-> power (i+1)(pow*2) in
   let power = power 1 2
@@ -32,8 +34,10 @@ let from_int x =
     |e::s when invert = 1 -> (if e = 1 then 0 else 1)::complement 1 s
     |e::s when e = 1 -> e::complement 1 s
     |e::s -> e::complement 0 s
-  in 
+  in
+  (*print_int(power);*)
   match x with
+    |x when x = min_int -> 1::0::complement 0 (binary (abs(x/2)) (power))
     |x when x<0 -> 1::complement 0 (binary (abs(x)) power)
     |x -> 0::binary (abs(x)) power;;
 
@@ -138,14 +142,14 @@ let compare_b bA bB =
     @param nA natural.
     @param nB natural.
 *)
-let (<<) nA nB = compare_b nA nB = 1;;
+let (>>) nA nB = compare_b nA nB = 1;;
 
 (** Smaller inorder comparison operator on bitarrays. Returns true if
     first argument is smaller than second and false otherwise.
     @param nA natural.
     @param nB natural.
 *)
-let (>>) nA nB = compare_b nA nB = (-1);;
+let (<<) nA nB = compare_b nA nB = (-1);;
 
 (** Bigger or equal inorder comparison operator on bitarrays. Returns
     true if first argument is bigger or equal to second and false
@@ -153,7 +157,7 @@ let (>>) nA nB = compare_b nA nB = (-1);;
     @param nA natural.
     @param nB natural.
 *)
-let (<<=) nA nB = compare_n nA nB = 1 || compare_n nA nB = 0;;
+let (>>=) nA nB = compare_n nA nB = 1 || compare_n nA nB = 0;;
 
 (** Smaller or equal inorder comparison operator on naturals. Returns
     true if first argument is smaller or equal to second and false
@@ -161,7 +165,7 @@ let (<<=) nA nB = compare_n nA nB = 1 || compare_n nA nB = 0;;
     @param nA natural.
     @param nB natural.
 *)
-let (>>=) nA nB = compare_n nA nB = (-1) || compare_n nA nB = 0;;
+let (<<=) nA nB = compare_n nA nB = (-1) || compare_n nA nB = 0;;
 ;;
 
 (** Sign of a bitarray.

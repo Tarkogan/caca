@@ -60,9 +60,9 @@ let generate_keys_rsa p q =
       |1 -> invalid_arg("error generating rsa key: invalid parameters")
       |x -> key (i-1)
     in
-     
+
     let (e,d) = key (o-1) in ((n,e),(n,d));;
-    
+
 
 
 (** Encryption using RSA cryptosystem.
@@ -84,7 +84,7 @@ let decrypt_rsa m (n , d) = mod_power m d n;;
     @param p is prime having form 2*q + 1 for prime q.
  *)
 let rec public_data_g p = (p, quot (p-1) 2);; (* (p,g) *)
-  
+
 (** Generate ElGamal public data.
     @param pub_data a tuple (g, p) of public data for ElGamal cryptosystem.
  *)
@@ -100,7 +100,7 @@ let generate_keys_g (g, p) =  (*(public key, private key)*)
 let encrypt_g msg (g, p) kA =
   let k = quot (7*p) 11 in
   (prime_mod_power g k p, msg * prime_mod_power kA k p);;
-  
+
 
 (** ElGamal decryption process.
     @param msg a tuple (msgA, msgB) forming an encrypted ElGamal message.

@@ -322,24 +322,34 @@ let mult_b bA bB =
     @param bB Bitarray you divide by. Non-zero!
 *)
 let quot_b bA bB =
-  let rec div a b i = print_b(a);print_b(b);match a with
-    |x when x >>! b -> div (diff_n a b) (b) (add_n i [1])
-    |x when x = b -> i
-    |_-> diff_n i [1]
-  in
-  match (bA, bB) with
-    |(0::s,0::l)|(1::s,1::l) -> clear_b(0::(div (abs_b bA) (abs_b bB) [0]))
-    |(1::s,0::l)|(0::s,1::l) -> clear_b(1::(div (abs_b bA) (abs_b bB) [0]))
-    |_ -> invalid_arg("quot_b: given lists' format does not meet the requirements");;
+  if to_int(clear_b(bB)) = 0 then invalid_arg("quot_b: second argument must be a non-zero Bitarray")
+  else
+    let rec div i n a b = match n with
+      |x when x >>! a -> diff_n i [1]
+      |x -> div (add_n i [1]) (add_n n b) a b
+    in
+    let modulo =
+      match (bA, bB) with
+	|(_::s,_::l) when s <<! l -> from_int(0)
+	|(0::s,0::l)|(1::s,1::l) -> clear_b(0::(div [0] [0] s l))
+	|(1::s,0::l)|(0::s,1::l) -> clear_b(1::(div [0] [0] s l))
+	|_ -> invalid_arg("quot_b: given lists' format does not meet the requirements")
+    in 
+    if sign_b bA = -1 &&  compare_b (mult_b modulo bB) bA != 0 then begin
+      match  sign_b bB with
+      |(-1) -> add_b modulo (from_int 1)
+      |1 -> add_b modulo (from_int (-1))
+      |_ -> invalid_arg("quot_b: second argument must be a non-zero Bitarray") end
+    else modulo;;
 
 (** Modulo of a bitarray against a positive one.
     @param bA Bitarray the modulo of which you're computing.
     @param bB Bitarray which is modular base.
 *)
-let mod_b bA bB = []
+let mod_b bA bB = clear_b(diff_b bA (mult_b bB (quot_b bA bB)));;
 
 (** Integer division of two bitarrays.
     @param bA Bitarray you want to divide.
     @param bB Bitarray you wnat to divide by.
 *)
-let div_b bA bB = ([], [])
+let div_b bA bB = (quot_b bA bB, mod_b bA bB);;

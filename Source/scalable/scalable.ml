@@ -80,7 +80,7 @@ let print_b bA =
     @param nB A natural.
 *)
 let rec compare_n nA nB =
-  let rec compare l1 l2 result = match (l1,l2) with      
+  let rec compare l1 l2 result = match (l1,l2) with
     |([],[]) -> result
     |([],_) -> (-1)
     |(e::_,[]) -> 1
@@ -297,8 +297,8 @@ let rec clear_b bA =
     |[_;_] -> bA
     |[_]|[] -> invalid_arg("clear_l: given list appears to be empty.")
     |_ -> if last bA = 0 then clear_b (delete bA) else bA;;
-	
-     
+
+
 (** Multiplication of two bitarrays.
     @param bA Bitarray.
     @param bB Bitarray.
@@ -315,22 +315,21 @@ let mult_b bA bB =
     |(0::s,1::l) -> clear_b(mult s l [1;0] 1)
     |(1::l,0::s) -> clear_b(mult l s [1;0] 1)
     |_ -> invalid_arg("mult_b: given lists' format does not meet the requirements");;
-  
+
 
 (** Quotient of two bitarrays.
     @param bA Bitarray you want to divide by second argument.
     @param bB Bitarray you divide by. Non-zero!
 *)
-let quot_b bA bB = 
-  let rec division dividende diviseur resultat origin = match origin with
-    |[e] -> if diviseur >=! dividende@[e] then 1::resultat else resultat
-    |e::s when diviseur >=! dividende@[e] -> division (diff_n diviseur (dividende@[e])) diviseur (1::resultat) s
-    |e::s -> division (dividende@[e]) diviseur (0::resultat) s
-    |_ -> invalid_arg("quot_b: the list does not meet the requirements")
+let quot_b bA bB =
+  let rec div a b i = print_b(a);print_b(b);match a with
+    |x when x >>! b -> div (diff_n a b) (b) (add_n i [1])
+    |x when x = b -> i
+    |_-> diff_n i [1]
   in
-  match (bA,bB) with
-    |(0::s,0::l)|(1::s,1::l) -> 0::clear_b(division [] l [] s)
-    |(0::s,1::l)|(1::s,0::l) -> 1::clear_b(division [] l [] s)
+  match (bA, bB) with
+    |(0::s,0::l)|(1::s,1::l) -> clear_b(0::(div (abs_b bA) (abs_b bB) [0]))
+    |(1::s,0::l)|(0::s,1::l) -> clear_b(1::(div (abs_b bA) (abs_b bB) [0]))
     |_ -> invalid_arg("quot_b: given lists' format does not meet the requirements");;
 
 (** Modulo of a bitarray against a positive one.

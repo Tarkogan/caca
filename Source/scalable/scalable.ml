@@ -66,7 +66,7 @@ let print_b bA =
     CAREFUL: print_b is then list int printer.
     UNCOMMENT FOR TOPLEVEL USE.
 *)
-(*#install_printer print_b;;*) 
+(*#install_printer print_b;;*)
 
 (** Internal comparisons on bitarrays and naturals. Naturals in this
     context are understood as bitarrays missing a bit sign and thus
@@ -80,12 +80,13 @@ let print_b bA =
     @param nB A natural.
 *)
 let rec compare_n nA nB =
-  let rec compare l1 l2 result = match (l1,l2) with
+  let rec compare l1 l2 result = match (l1,l2) with      
     |([],[]) -> result
     |([],_) -> (-1)
     |(e::_,[]) -> 1
-    |(e::s,f::l) -> match (e,f) with
+    |(e::s,f::l) ->
 
+      match (e,f) with
         |(1,0) -> compare s l 1
         |(0,1) -> compare s l (-1)
         |(0,0)|(1,1) -> compare s l result
@@ -188,17 +189,17 @@ let abs_b bA = match bA with
     @param a Built-in integer smaller than 4.
 *)
 let _quot_t a =
-  if a < 0 then invalid_arg("_quot_t: a must be positive")
+  if abs(a) >= 4 then invalid_arg("_quot_t: |a| < 4")
   else
-    a / 2;;
+    abs(a / 2) + if a = (-1) then 1 else 0;;
 
 (** Modulo of integer smaller than 4 by 2.
     @param a Built-in integer smaller than 4.
 *)
 let _mod_t a =
-  if a < 0 then invalid_arg("_quot_t: a must be positive")
+  if abs(a) >= 4 then invalid_arg("_mod_t: |a| < 4")
   else
-    a mod 2;;
+    abs(a mod 2);;
 
 (** Division of integer smaller than 4 by 2.
     @param a Built-in integer smaller than 4.
@@ -225,8 +226,8 @@ let add_n nA nB =
 let diff_n nA nB =
   if nA <=! nB then invalid_arg("diff_n: first natural must be larger than the second")
   else let rec add last lis1 lis2 = match (lis1,lis2) with
-    |(e::s,f::l) -> _mod_t (e-f-last)::add (-_quot_t (e-f-last)) s l
-    |(e::s,[]) -> _mod_t (e-last)::add (-_quot_t (e-last)) s []
+    |(e::s,f::l) -> _mod_t (e-f-last)::add (_quot_t (e-f-last)) s l
+    |(e::s,[]) -> _mod_t (e-last)::add (_quot_t (e-last)) s []
     |([],[]) -> if last = 1 then [1] else []
     |_ -> invalid_arg("diff_n: nA<nB")
        in
@@ -271,27 +272,66 @@ let rec shift bA d =
     in
     delete d bA@create truc;;
 
+(** Creation of a natural number filled with 'nbr', and of the same size as another.
+    @param bA natural number.
+*)
+let rec empty_n nA (nbr: int) = match nA with
+  |[] -> []
+  |e::s -> nbr::empty_n s nbr;;
+
+(** Deletes all zeros at the end of an int list. Returns a 2 int long or plus list (Bitarray format).
+    @param bA int list
+*)
+let rec clear_b bA =
+  let rec last = function
+    |[e] -> e
+    |e::s -> last s
+    |_ -> failwith("clear_l: could not verify last character.")
+  in
+  let rec delete = function
+    |[e] -> []
+    |e::s -> e::delete s
+    |_ -> failwith("clear_l: could not delete last character.")
+  in
+  match bA with
+    |[_;_] -> bA
+    |[_]|[] -> invalid_arg("clear_l: given list appears to be empty.")
+    |_ -> if last bA = 0 then clear_b (delete bA) else bA;;
+	
+     
 (** Multiplication of two bitarrays.
     @param bA Bitarray.
     @param bB Bitarray.
 *)
 let mult_b bA bB =
-  let rec empty list = match list with
-    |[] -> []
-    |e::s -> 0::empty s
+  let empty = empty_n bA 0 in
+  let rec mult nombre multiplicateur resultat signe = match nombre with
+    |list when 0::list = empty -> resultat
+    |e::s -> mult (shift nombre 1) (0::multiplicateur) (if e = 0 then resultat else add_b resultat (signe::multiplicateur)) signe
+    |_ -> failwith("mult_b: an issue occured during the multiplication process")
   in
-  let empty = empty(bA) in
-  let rec mult nombre multiplicateur resultat = match nombre with
-    |list when list = empty -> resultat
-    |e::s -> mult (shift nombre 1) (0::multiplicateur) (if e = 0 then resultat else add_b resultat multiplicateur)
-  in
-  mult bA bB;;
+  match (bA,bB) with
+    |(0::s,0::l)|(1::s,1::l) -> clear_b(mult s l [0;0] 0)
+    |(0::s,1::l) -> clear_b(mult s l [1;0] 1)
+    |(1::l,0::s) -> clear_b(mult l s [1;0] 1)
+    |_ -> invalid_arg("mult_b: given lists' format does not meet the requirements");;
+  
 
 (** Quotient of two bitarrays.
     @param bA Bitarray you want to divide by second argument.
     @param bB Bitarray you divide by. Non-zero!
 *)
-let quot_b bA bB = []
+let quot_b bA bB = 
+  let rec division dividende diviseur resultat origin = match origin with
+    |[e] -> if diviseur >=! dividende@[e] then 1::resultat else resultat
+    |e::s when diviseur >=! dividende@[e] -> division (diff_n diviseur (dividende@[e])) diviseur (1::resultat) s
+    |e::s -> division (dividende@[e]) diviseur (0::resultat) s
+    |_ -> invalid_arg("quot_b: the list does not meet the requirements")
+  in
+  match (bA,bB) with
+    |(0::s,0::l)|(1::s,1::l) -> 0::clear_b(division [] l [] s)
+    |(0::s,1::l)|(1::s,0::l) -> 1::clear_b(division [] l [] s)
+    |_ -> invalid_arg("quot_b: given lists' format does not meet the requirements");;
 
 (** Modulo of a bitarray against a positive one.
     @param bA Bitarray the modulo of which you're computing.

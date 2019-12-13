@@ -47,14 +47,17 @@ let pow x n =
     @param n exponent, a non-negative bitarray
  *)
 let power x n =
+  if sign_b n = -1 then invalid_arg("power: exponent must be positive")
+  else 
   let rec powa b =
-    let parity = if (mod_b b [0;0;1]) << [0;0]  then [0;1] else x in
-    match b with
-      |x when compare_b x [0;0] = 0 -> [0;1]
-      |x when compare_b x [0;1] = 0 -> x
-      |_ -> let powa = powa(quot_b b [0;0;1]) in mult_b parity (mult_b powa powa)
+    let parity = if compare_b(mod_b b (from_int 2)) [0;0] = 0 then from_int 1 else x
+    in match b with
+      |[0;0] -> [0;1]
+      |[0;1] -> x
+      |_ -> let powa = (powa (quot_b b [0;0;1])) in mult_b parity (mult_b powa powa)
   in
-  powa(n);;
+  powa n;;
+    
 
 (* Modular expnonentiation ; modulo a given natural (bitarray without
    sign bits).
@@ -65,7 +68,17 @@ let power x n =
     @param n exponent, a non-negative bitarray
     @param m modular base, a positive bitarray
  *)
-let mod_power x n m = []
+let mod_power x n m =
+  if sign_b n = -1 || sign_b m = -1 then invalid_arg("mod_power: exponent/base must be positive")
+  else
+    let rec powa base exp n =
+      let base = mod_b base m in match mod_b exp [0;0;1] with
+	|_ when compare_b exp [0;0] = 0 -> [0;1]
+	|_ when compare_b exp [0;1] = 0 -> base
+	|x when compare_b x [0;0] = 0 -> powa (mod_b (mult_b base base) n) (quot_b exp [0;0;1]) n
+	|_ -> mod_b (mult_b base (powa base (diff_b exp [0;1]) n)) m
+    in
+    if compare_b x [0;0] = 0 then [0;0] else powa x n m;;
 
 (* Making use of Fermat Little Theorem for very quick exponentation
    modulo prime number.
@@ -77,4 +90,11 @@ let mod_power x n m = []
     @param n exponent, a non-negative bitarray
     @param p prime modular base, a positive bitarray
  *)
-let prime_mod_power x n p = []
+let prime_mod_power x n p =
+  if sign_b n = -1 || sign_b p = -1 then invalid_arg("mod_power: exponent/base must be positive")
+  else
+    let facteur = mod_b n (diff_b p [0;1])
+    in match (n <= [0;0]) with
+      |true when compare_b n [0;0] = 0 -> [0;1]
+      |true -> [0;0]
+      |false -> mod_power x facteur p;; 

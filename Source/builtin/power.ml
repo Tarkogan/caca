@@ -30,6 +30,8 @@ let pow x n =
     @param n exponent
  *)
 let power x n =
+  if n < 0 then invalid_arg("power: exponent must be positive")
+  else 
   let rec powa b =
     let parity = if b mod 2 = 0 then 1 else x in
     match b with

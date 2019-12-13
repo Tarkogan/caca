@@ -1,6 +1,8 @@
 (** Basic arithmetics with built-in *)
 
-(*#use "builtin.ml";;*)
+(*
+#use "builtin.ml";;
+*)
 open Builtin
 
 (* Greater common divisor and smaller common multiple

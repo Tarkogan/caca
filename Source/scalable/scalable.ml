@@ -73,6 +73,25 @@ let print_b bA =
     assumed to be non-negative.
 *)
 
+(** Deletes all zeros at the end of an int list. Returns a 2 int long or plus list (Bitarray format).
+    @param bA int list
+*)
+let rec clear_b bA =
+  let rec last = function
+    |[e] -> e
+    |e::s -> last s
+    |_ -> failwith("clear_l: could not verify last character.")
+  in
+  let rec delete = function
+    |[e] -> []
+    |e::s -> e::delete s
+    |_ -> failwith("clear_l: could not delete last character.")
+  in
+  match bA with
+    |[_;_] -> bA
+    |[_]|[] -> invalid_arg("clear_l: given list appears to be empty.")
+    |_ -> if last bA = 0 then clear_b (delete bA) else bA;;
+
 (** Comparing naturals. Output is 1 if first argument is bigger than
     second -1 if it is smaller and 0 in case of equality.
     @param nA A natural, a bitarray having no sign bit.
@@ -80,6 +99,7 @@ let print_b bA =
     @param nB A natural.
 *)
 let rec compare_n nA nB =
+  let (nA,nB) = clear_b(nA@[0;0]),clear_b(nB@[0;0]) in
   let rec compare l1 l2 result = match (l1,l2) with
     |([],[]) -> result
     |([],_) -> (-1)
@@ -135,7 +155,7 @@ let compare_b bA bB = match (bA, bB) with
   |(1::s,0::l) -> -1
   |(0::s,1::l) -> 1
   |(1::s,1::l) -> -compare_n s l
-  |(0::s,0::l) -> compare s l
+  |(0::s,0::l) -> compare_n s l
   |_ -> invalid_arg("compare_n: list's format is invalid");;
 
 (** Bigger inorder comparison operator on bitarrays. Returns true if
@@ -216,7 +236,7 @@ let add_n nA nB =
     |(e::s,[])|([],e::s) -> _mod_t (e+last)::add (_quot_t (e+last)) s []
     |([],[]) -> if last = 1 then [1] else []
   in
-  (add 0 nA nB);;
+  clear_b((add 0 nA nB)@[0;0]);;
 
 (** Difference of two naturals.
     UNSAFE: First entry is assumed to be bigger than second.
@@ -231,19 +251,22 @@ let diff_n nA nB =
     |([],[]) -> if last = 1 then [1] else []
     |_ -> invalid_arg("diff_n: nA<nB")
        in
-       (add 0 nA nB);;
+       clear_b((add 0 nA nB)@[0;0]);;
 
 (** Addition of two bitarrays.
     @param bA Bitarray.
     @param bB Bitarray.
 *)
-let add_b bA bB = match (bA,bB) with
+let add_b bA bB =
+  let res = match (bA,bB) with
   |(1::s,0::l) -> if s >>! l then 1::diff_n s l else if s <<! l then 0::diff_n l s else from_int(0)
   |(0::s,1::l) -> if s >>! l then 0::diff_n s l else if s <<! l then 1::diff_n l s else from_int(0)
   |(1::s,1::l) -> 1::add_n s l
   |(0::s,0::l) -> 0::add_n s l
-  |_ -> invalid_arg("add_b: Bitarrays' format seems invalid");;
-
+  |_ -> invalid_arg("add_b: Bitarrays' format seems invalid")
+  in 
+  clear_b(res@[0;0]);;
+  
 (** Difference of two bitarrays.
     @param bA Bitarray.
     @param bB Bitarray.
@@ -279,25 +302,6 @@ let rec empty_n nA (nbr: int) = match nA with
   |[] -> []
   |e::s -> nbr::empty_n s nbr;;
 
-(** Deletes all zeros at the end of an int list. Returns a 2 int long or plus list (Bitarray format).
-    @param bA int list
-*)
-let rec clear_b bA =
-  let rec last = function
-    |[e] -> e
-    |e::s -> last s
-    |_ -> failwith("clear_l: could not verify last character.")
-  in
-  let rec delete = function
-    |[e] -> []
-    |e::s -> e::delete s
-    |_ -> failwith("clear_l: could not delete last character.")
-  in
-  match bA with
-    |[_;_] -> bA
-    |[_]|[] -> invalid_arg("clear_l: given list appears to be empty.")
-    |_ -> if last bA = 0 then clear_b (delete bA) else bA;;
-
 
 (** Multiplication of two bitarrays.
     @param bA Bitarray.
@@ -331,8 +335,8 @@ let quot_b bA bB =
     let modulo =
       match (bA, bB) with
 	|(_::s,_::l) when s <<! l -> from_int(0)
-	|(0::s,0::l)|(1::s,1::l) -> clear_b(0::(div [0] [0] s l))
-	|(1::s,0::l)|(0::s,1::l) -> clear_b(1::(div [0] [0] s l))
+	|(0::s,0::l)|(1::s,1::l) -> (0::(div [0] [0] s l))
+	|(1::s,0::l)|(0::s,1::l) -> (1::(div [0] [0] s l))
 	|_ -> invalid_arg("quot_b: given lists' format does not meet the requirements")
     in 
     if sign_b bA = -1 &&  compare_b (mult_b modulo bB) bA != 0 then begin
@@ -350,6 +354,24 @@ let mod_b bA bB = clear_b(diff_b bA (mult_b bB (quot_b bA bB)));;
 
 (** Integer division of two bitarrays.
     @param bA Bitarray you want to divide.
-    @param bB Bitarray you wnat to divide by.
+    @param bB Bitarray you want to divide by.
 *)
 let div_b bA bB = (quot_b bA bB, mod_b bA bB);;
+
+let rec invert_l liste = match liste with
+  |[] -> []
+  |e::s -> invert_l s @ [e];;
+
+let test bA bB =
+  if compare_b (clear_b(bB)) [0;0] = 0 then invalid_arg("quot_b: second argument must be a non-zero Bitarray")
+  else
+    let rec div dividende diviseur quotient origine = match origine with
+      |_ when compare_b (clear_b(origine)) [0;0] = 0 -> quotient
+      |e::s when e::dividende >> diviseur -> div (diff_n (e::dividende) diviseur)(diviseur)(1::quotient)(shift origine 1)
+      |e::s -> div (e::dividende)(diviseur)(0::quotient)(shift origine 1)
+      |_ -> failwith("quot_b: couldn't divide.")
+    in
+    match (bA,bB) with
+      |(0::s,0::l) -> 0::(div ([])(invert_l l)([])(invert_l s))
+      |(1::s,0::l)|(0::s,1::l)|(1::s,1::l) -> let quot = 1::(div ([])(invert_l l)([])(invert_l s)) in if compare_b(mult_b quot bB) bA = 0 then quot else diff_b quot [0;1]
+      |_ -> invalid_arg("quot_b: list isn't a Bitarray.");;

@@ -51,7 +51,7 @@ let eratosthenes n =
 let write_list li file =
   let file = open_out file in
   let rec write_in liste fichier = match liste with
-    |[] -> close_out file;
+    |[] -> close_out file
     |e::s -> Printf.fprintf fichier "%d\n" e; write_in s fichier
   in  
   write_in li file;;
@@ -115,8 +115,8 @@ let rec last_two l = match l with
    purposes.
 *)
 
-(*
-creates a list of couples of prime numbers linked to eachother by the relation f
+(**
+   creates a list of couples of prime numbers linked to eachother by the relation f
 *)
 let prime_couples limit isprime f =
   let prime_list = eratosthenes limit in

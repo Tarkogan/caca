@@ -14,8 +14,8 @@ open Basic_arithmetics
 let break key =
   let (a,_) = key in
   let rec find i = match i with
-    |_ when (a/i) * i = a -> (a/i, sign a * i)
+    |_ when (a/i) * i = a -> (sign a * i, a/i)
     |1 -> invalid_arg("Couldn't find a prime pair matching this key, are you sure it's correct ?")
-    |i -> find(i-1)
+    |i -> find(i+1)
   in
-  find (abs(a)-1);;
+  find (2) ;;

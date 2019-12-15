@@ -11,8 +11,8 @@ open Test_scalable_templates
 let p = from_int 9967 and q = from_int 9973
 let ((_, e), (n, d)) = generate_keys_rsa p q
 
-let phin = mult_b (diff_b p [1;1]) (diff_b q [1;1])
-let is_inverse x y n = mod_b (mult_b (mod_b x n) (mod_b y n)) n = [1; 1]
+let phin = mult_b (diff_b p [0;1]) (diff_b q [0;1])
+let is_inverse x y n = mod_b (mult_b (mod_b x n) (mod_b y n)) n = [0; 1]
 let () = let t_list = [(e, d, phin), true]
          in
          run_test template_3_b "Generate RSA Keys Test" is_inverse t_list

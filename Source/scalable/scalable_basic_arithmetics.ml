@@ -1,7 +1,7 @@
 (** Basic arithmetics for ordered euclidian ring. *)
 
 (*
-#use "scalable.ml";;
+#mod_use "scalable.ml";;
 *)
 
 open Scalable
@@ -47,7 +47,7 @@ let bezout_b bA bB =
   if sign_b(bA) = 0 || sign_b(bB) = 0 then invalid_arg "a and b must be non zero integers"
   else
     let rec bez(u1,v1,u2,v2,r1,r2) = match r2 with
-      |x when compare_b (clear_b x) [0;0]  = 0 -> (clear_b u1, clear_b v1,clear_b r1)
+      |x when compare_b (x) [0;0]  = 0 -> (u1, v1, r1)
       |_ -> let q = quot_b r1 r2 in
 	    let (u3,v3,r3) = (diff_b u1 (mult_b q u2), diff_b v1 (mult_b q v2), diff_b r1 (mult_b q r2))
 	    in bez(u2,v2,u3,v3,r2,r3)

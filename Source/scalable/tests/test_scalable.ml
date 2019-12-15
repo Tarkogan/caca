@@ -48,7 +48,7 @@ let () =  let t_list = [ (from_int (-71), from_int (7) ), (from_int (-11),from_i
 			((from_int (33), from_int (16) ), (from_int (2),from_int(1) ) );
 			((from_int (16), from_int (-2) ), (from_int (-8),from_int(0) ) );
 			((from_int (-55), from_int (-7) ), (from_int (8),from_int(1) ) );
-		(*	((from_int (-123456789), from_int (123) ), (from_int (-1003714),from_int(33) ) )*)]
+			((from_int (-123456789), from_int (123) ), (from_int (-1003714),from_int(33) ) )]
           in
           run_test template_2_2 "Bitarray Division Function" div_b t_list
 ;;

@@ -73,15 +73,23 @@ let print_b bA =
     assumed to be non-negative.
 *)
 
-(** Deletes all zeros at the end of an int list. Returns a 2 int long or plus list (Bitarray format).
+(**Finds the last value of a list and return a tuple: 
+   list without its last character, last character
+   @param list
+*)
+let last list =  
+  let rec find list char truc = match list with
+    |[e] -> (truc,e)
+    |e::s -> find s char (truc@[e])
+    |_ -> failwith("last: could not verify last character.")
+  in
+  find list 0 [];;
+
+(** Deletes all zeros at the end of an int list. 
+    Returns a 2 int long or plus list (Bitarray format).
     @param bA int list
 *)
 let rec clear_b bA =
-  let rec last = function
-    |[e] -> e
-    |e::s -> last s
-    |_ -> failwith("clear_l: could not verify last character.")
-  in
   let rec delete = function
     |[e] -> []
     |e::s -> e::delete s
@@ -90,7 +98,7 @@ let rec clear_b bA =
   match bA with
     |[_;_] -> bA
     |[_]|[] -> invalid_arg("clear_l: given list appears to be empty.")
-    |_ -> if last bA = 0 then clear_b (delete bA) else bA;;
+    |_ -> let (_,last) = last bA in if last = 0 then clear_b (delete bA) else bA;;
 
 (** Comparing naturals. Output is 1 if first argument is bigger than
     second -1 if it is smaller and 0 in case of equality.
@@ -244,7 +252,7 @@ let add_n nA nB =
     @param nB Natural.
 *)
 let diff_n nA nB =
-  if nA <=! nB then invalid_arg("diff_n: first natural must be larger than the second")
+  if nA <<! nB then invalid_arg("diff_n: first natural must be larger than the second")
   else let rec add last lis1 lis2 = match (lis1,lis2) with
     |(e::s,f::l) -> _mod_t (e-f-last)::add (_quot_t (e-f-last)) s l
     |(e::s,[]) -> _mod_t (e-last)::add (_quot_t (e-last)) s []
@@ -326,6 +334,49 @@ let mult_b bA bB =
     @param bB Bitarray you divide by. Non-zero!
 *)
 let quot_b bA bB =
+  if compare_b (clear_b(bB)) [0;0] = 0 then invalid_arg("quot_b: second argument must be a non-zero Bitarray")
+  else
+    let rec div dividende origin resultat diviseur = match origin with
+      |[] -> (if dividende >=! diviseur then 1 else 0)::resultat
+      |_ when dividende >=!diviseur -> let (empty,last) = last origin in
+					div (last::(diff_n dividende diviseur)) empty (1::resultat) diviseur
+      |_ -> let (empty,last) = last origin in
+	    div (last::dividende) empty (0::resultat) diviseur
+    in
+    let modulo =
+      match (bA, bB) with
+	|(_::s,_::l) when s <<! l -> from_int(0)
+	|(0::s,0::l)|(1::s,1::l) -> (0::(div [] s [] l))
+	|(1::s,0::l)|(0::s,1::l) -> (1::(div [] s [] l))
+	|_ -> invalid_arg("quot_b: given lists' format does not meet the requirements")
+    in
+    clear_b(
+    if sign_b bA = -1 &&  compare_b (mult_b modulo bB) bA != 0 then begin
+      match  sign_b bB with
+	|(-1) -> add_b modulo (from_int 1)
+	|1 -> add_b modulo (from_int (-1))
+	|_ -> invalid_arg("quot_b: second argument must be a non-zero Bitarray") end
+    else modulo);;
+
+(** Modulo of a bitarray against a positive one.
+    @param bA Bitarray the modulo of which you're computing.
+    @param bB Bitarray which is modular base.
+*)
+let mod_b bA bB = clear_b(diff_b bA (mult_b bB (quot_b bA bB)));;
+
+(** Integer division of two bitarrays.
+    @param bA Bitarray you want to divide.
+    @param bB Bitarray you want to divide by.
+*)
+let div_b bA bB = (quot_b bA bB, mod_b bA bB);;
+
+let rec invert_l liste = match liste with
+  |[] -> []
+  |e::s -> invert_l s @ [e];;
+
+
+(**
+let quot_b bA bB =
   if to_int(clear_b(bB)) = 0 then invalid_arg("quot_b: second argument must be a non-zero Bitarray")
   else
     let rec div i n a b = match n with
@@ -345,33 +396,7 @@ let quot_b bA bB =
       |1 -> add_b modulo (from_int (-1))
       |_ -> invalid_arg("quot_b: second argument must be a non-zero Bitarray") end
     else modulo;;
-
-(** Modulo of a bitarray against a positive one.
-    @param bA Bitarray the modulo of which you're computing.
-    @param bB Bitarray which is modular base.
 *)
-let mod_b bA bB = clear_b(diff_b bA (mult_b bB (quot_b bA bB)));;
 
-(** Integer division of two bitarrays.
-    @param bA Bitarray you want to divide.
-    @param bB Bitarray you want to divide by.
-*)
-let div_b bA bB = (quot_b bA bB, mod_b bA bB);;
 
-let rec invert_l liste = match liste with
-  |[] -> []
-  |e::s -> invert_l s @ [e];;
 
-let test bA bB =
-  if compare_b (clear_b(bB)) [0;0] = 0 then invalid_arg("quot_b: second argument must be a non-zero Bitarray")
-  else
-    let rec div dividende diviseur quotient origine = match origine with
-      |_ when compare_b (clear_b(origine)) [0;0] = 0 -> quotient
-      |e::s when e::dividende >> diviseur -> div (diff_n (e::dividende) diviseur)(diviseur)(1::quotient)(shift origine 1)
-      |e::s -> div (e::dividende)(diviseur)(0::quotient)(shift origine 1)
-      |_ -> failwith("quot_b: couldn't divide.")
-    in
-    match (bA,bB) with
-      |(0::s,0::l) -> 0::(div ([])(invert_l l)([])(invert_l s))
-      |(1::s,0::l)|(0::s,1::l)|(1::s,1::l) -> let quot = 1::(div ([])(invert_l l)([])(invert_l s)) in if compare_b(mult_b quot bB) bA = 0 then quot else diff_b quot [0;1]
-      |_ -> invalid_arg("quot_b: list isn't a Bitarray.");;

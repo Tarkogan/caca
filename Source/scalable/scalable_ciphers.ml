@@ -1,5 +1,12 @@
+
 (** Ciphers
     bitarrays based ciphers.
+*)
+
+(*
+#mod_use "scalable.ml";;
+#mod_use "scalable_basic_arithmetics.ml";;
+#mod_use "scalable_power.ml";;
 *)
 
 open Scalable
@@ -14,7 +21,25 @@ open Scalable_power
     @param p prime bitarray
     @param q prime bitarray
 *)
-let generate_keys_rsa p q = (([],[]), ([], []))
+let generate_keys_rsa p q =
+  if compare_b p q = 0 then invalid_arg("Error generate_keys_rsa: both arguments have to be distinct prime numbers.")
+  else
+    let n = (mult_b p q)
+    and o = mult_b (diff_b p [0;1]) (diff_b q [0;1]) in
+    
+    let rec dice d e = print_string("dice\n");match d with
+      |x when compare_b(mod_b (mult_b e x) o) [0;1] = 0 -> (e,d)
+      |[0;1] -> invalid_arg("error generating rsa key: invalid parameters")
+      |x -> dice (diff_b x [0;1]) e
+    in
+    let rec key i k = match i with
+      |x when let (_,_,c) = (bezout_b o x) in compare c [0;1] = 0 -> dice (diff_b o [0;1]) i
+      |[0;1] -> invalid_arg("error generating rsa key: invalid parameters")
+      |x -> print_int(k); key (diff_b i [0;1]) (k+1)
+    in
+    
+    let (e,d) = key (diff_b o [0;1]) 0 in ((n,e),(n,d));;
+    
 
 (** Encryption using RSA cryptosystem.
     @param m bitarray hash of message

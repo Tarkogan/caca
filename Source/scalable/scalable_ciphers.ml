@@ -62,7 +62,7 @@ let rec public_data_g p = (p, quot_b(diff_b p [0;1]) [0;0;1]);;
     @param pub_data a tuple (g, p) of public data for ElGamal cryptosystem.
  *)
 let generate_keys_g (g, p) =
-  let a = diff_b g [0;0;1] in
+  let a = add_b( (from_int (Random.int(10000)))) (diff_b g [0;0;1])  in
   (prime_mod_power g a p, a);;
 
 (** ElGamal encryption process.

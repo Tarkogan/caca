@@ -32,16 +32,17 @@ let init_eratosthenes n =
 let eratosthenes n =
   if n < 2 then invalid_arg("Error eratosthenes: number of values must be at least 2.")
   else
-  let rec is_prime nbr i = match modulo nbr i with
-    |_ when i*i > abs(nbr) -> true
-    |0 -> false
-    |_ -> is_prime nbr (i+2)
-  in
-  let rec test i = match i with
-    |x when x > n -> []
-    |x -> if is_prime i 3  then i::test(i+2) else test(i+2)
-  in
-  2::test 3;;
+    let liste = init_eratosthenes in
+    let rec divide nbr i = match modulo nbr i with
+      |_ when i*i > abs(nbr) -> true
+      |0 -> false
+      |_ -> divide nbr (i+2)
+    in
+    let rec test i = match i with
+      |x when x > n -> []
+      |x -> if divide i 3  then i::test(i+2) else test(i+2)
+    in
+    2::test 3;;
 
 (* Write and read into file functions for lists. *)
 

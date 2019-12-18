@@ -30,4 +30,12 @@ let crt_image x l =
     @param l list of pairwise relatively prime factors of m
     @param y list of remainders modulo pairwise relatively prime factors of m
  *)
-let crt_solver m l y = 0
+let crt_solver m l y =
+  let inverse_list y = match (y) with
+    |e::s -> let (b,_,c) = bezout e m in if c = 1 then b::inverse s else inverse_list s
+    |[] -> []
+  in
+  let inverse = inverse_list y in
+  let rec image 
+  
+      

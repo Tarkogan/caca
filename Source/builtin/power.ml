@@ -55,7 +55,7 @@ let mod_power x n m =
     let base = modulo base m in match modulo exp 2 with
       |_ when exp = 0 -> 1
       |_ when exp = 1 -> base
-      |0 -> powa (modulo (base*base) n) (exp/2) n
+      |0 -> powa (modulo (base*base) n) (quot exp 2) n
       |_ -> modulo(base * (powa base (exp-1) n)) m
   in
   if x = 0 then 0 else powa x n m;;

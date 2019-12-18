@@ -89,16 +89,14 @@ let last list =
     Returns a 2 int long or plus list (Bitarray format).
     @param bA int list
 *)
-let rec clear_b bA =
-  let rec delete = function
-    |[e] -> []
-    |e::s -> e::delete s
-    |_ -> failwith("clear_l: could not delete last character.")
+let clear_b bA =
+  let rec clear list = match list with
+    |e::f::[] -> List.rev(list)
+    |0::s -> clear s
+    |1::s -> List.rev(list)
+    |_ -> invalid_arg("Clear_b list's format is invalid")
   in
-  match bA with
-    |[_;_] -> bA
-    |[_]|[] -> invalid_arg("clear_l: given list appears to be empty.")
-    |_ -> let (_,last) = last bA in if last = 0 then clear_b (delete bA) else bA;;
+  clear (List.rev(bA));;
 
 (** Comparing naturals. Output is 1 if first argument is bigger than
     second -1 if it is smaller and 0 in case of equality.
@@ -373,30 +371,3 @@ let div_b bA bB = (quot_b bA bB, mod_b bA bB);;
 let rec invert_l liste = match liste with
   |[] -> []
   |e::s -> invert_l s @ [e];;
-
-
-(**
-let quot_b bA bB =
-  if to_int(clear_b(bB)) = 0 then invalid_arg("quot_b: second argument must be a non-zero Bitarray")
-  else
-    let rec div i n a b = match n with
-      |x when x >>! a -> diff_n i [1]
-      |x -> div (add_n i [1]) (add_n n b) a b
-    in
-    let modulo =
-      match (bA, bB) with
-	|(_::s,_::l) when s <<! l -> from_int(0)
-	|(0::s,0::l)|(1::s,1::l) -> (0::(div [0] [0] s l))
-	|(1::s,0::l)|(0::s,1::l) -> (1::(div [0] [0] s l))
-	|_ -> invalid_arg("quot_b: given lists' format does not meet the requirements")
-    in 
-    if sign_b bA = -1 &&  compare_b (mult_b modulo bB) bA != 0 then begin
-      match  sign_b bB with
-      |(-1) -> add_b modulo (from_int 1)
-      |1 -> add_b modulo (from_int (-1))
-      |_ -> invalid_arg("quot_b: second argument must be a non-zero Bitarray") end
-    else modulo;;
-*)
-
-
-

@@ -24,34 +24,19 @@ let crt_image x l =
 
 (** Inverse image of Chinese Remainder map
     @para m a positive integer
-    @param l list of pairwise relatively prime factors of m
-    @param y list of remainders modulo pairwise relatively prime factors of m
+    @param l list of pairwise coprime factors of first argument.
+    @param y list of remainders modulo pairwise relatively prime factors of m   
  *)
-(*
-let crt_solver m l y =
-  let inverse_list y = match (y) with
-    |e::s -> let (b,_,c) = bezout e m in if c = 1 then b::inverse s else inverse_list s
-    |[] -> []
+let rec crt_solver m l y =
+  let test m l y = match (l, y) with
+    |(p::q::[], k1::k2::[]) -> let (u,v,_) = bezout p q in
+                               let a = (p*u*k2) + (v*q*k1)
+                               in (p*q, a)
+    |_ -> invalid_arg("Erreur: probleme inverse CRT par 2")
+  in                                              
+  let rec solver l y = match (l, y) with
+    |(e1::s1::[], e2::s2::[]) -> test m l y
+    |(e1::s1, e2::s2) -> let (a, b) = solver s1 s2 in test m (e1::[a]) (e2::[b])
+    |_ -> invalid_arg("Erreur: probleme inverse CRT par 1")
   in
-  let inverse = inverse_list y in
-  let rec image 
-*)
-
-
-let crt_solver m l y = 0 (* 
-  let rec bez liste  = match (liste) with
-      
-    |e::f::[]-> let (a,b,c) = bezout e f in
-		if c != 1 then failwith("crt_solver: list must be made of pairwise relatively primes only.")
-		else e*a + f*b
-    |e::s -> let f = bez s in
-	      let (a,b,c) = bezout e f in
-	      if c != 1 then failwith("crt_solver: list must be made of pairwise relatively primes only.")
-	      else e*a + f*b
-    |_ -> invalid_arg("crt_solver: list may be incomplete")
-  in
-  bez y;;
-     
-			 *)
-       
-      
+  let (_,res) = solver l y in modulo res m;;

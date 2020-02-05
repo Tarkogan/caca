@@ -193,7 +193,6 @@ let (>>=) bA bB = compare_b bA bB = 1 || compare_b bA bB = 0;;
     @param nB natural.
 *)
 let (<<=) bA bB = compare_b bA bB = -1 || compare_b bA bB = 0;;
-;;
 
 (** Sign of a bitarray.
     @param bA Bitarray.

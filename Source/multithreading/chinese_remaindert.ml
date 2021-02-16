@@ -37,6 +37,7 @@ let rec crt_solver m l y =
   let rec solver l y = match (l, y) with
     |(e1::s1::[], e2::s2::[]) -> test m l y
     |(e1::s1, e2::s2) -> let (a, b) = solver s1 s2 in test m (e1::[a]) (e2::[b])
+	|(e1::[],e2::[]) -> e2
     |_ -> invalid_arg("Erreur: probleme inverse CRT par 1")
   in
   let (_,res) = solver l y in modulo res m;;

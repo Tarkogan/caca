@@ -1,5 +1,6 @@
 (** Factoring Built-In Int Primes *)
-
+#use "builtin.ml"
+#use "basic_arithmetics.ml"
 open Builtin
 open Basic_arithmetics
 
